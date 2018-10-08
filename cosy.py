@@ -8,18 +8,27 @@ import re
 
 # Function that runs cosy given field gradients and outputs resolution at FP3. 
 # Output is written in file temp-results
-def cosyrun(qFields):
+def cosyrun(qFields, *index):
 
     q1s = qFields[0]
     q2s = qFields[1]
     q3s = qFields[2]
+    #q3s = 0.242643-0.0005+0.000729
     q4s = qFields[3]
+    #q4s = -0.24501-0.002549
     q5s = qFields[4]
+    #q5s = 0.1112810+0.00111
     q6s = qFields[5]
+    #q6s = 0.181721-0.000093+0.00010-0.000096
     q7s = qFields[6]        
-    
+    #q7s = -0.0301435+0.0001215
+ 
+    resultsFilename = 'results' + str(index[0]) + '.txt'
+    cosyFilename = 'simpleOptimization' + str(index[0]) + '.fox'
+    tempresFilename = 'temp-results' + str(index[0])
+
     # creating input file
-    f = open('simpleOptimization.fox','w')
+    f = open(cosyFilename,'w')
     
     f.write('INCLUDE \'COSY\';\n')
     f.write('PROCEDURE RUN ;\n')
@@ -116,6 +125,11 @@ def cosyrun(qFields):
     f.write('FR 3; {Fringe field flag}\n')
     f.write('\n')
     f.write('DL 0.80+0.000106; {z}                                         {DL1}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('TA -0.0299 -0.0435; {Pitch Yaw}\n')
     f.write('RA 0.0035; {Roll}\n')
@@ -125,8 +139,18 @@ def cosyrun(qFields):
     f.write('SA -0.000290 0.000002;\n')
     f.write('RA -0.0035;\n')
     f.write('TA 0.0299 0.0435;\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 0.19+0.00105-0.000106; {z}                                 {DL2}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('TA 0.0496 0.0620; {Pitch, Yaw}\n')
     f.write('RA 0.0252; {Roll}\n')
@@ -136,8 +160,18 @@ def cosyrun(qFields):
     f.write('SA -0.0002 -0.000068; {-x, -y}\n')
     f.write('RA -0.0252; {-Roll}\n')
     f.write('TA -0.0496 -0.0620; {-Pitch, -Yaw}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 0.58-0.000125+0.00105;                                     {DL3}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('TA 0.0094 0.0108; {Pitch, Yaw}\n')
     f.write('RA 0.0058; {Roll}\n')
@@ -146,8 +180,18 @@ def cosyrun(qFields):
     f.write('SA 0.000036 -0.000112; {-x, -y}\n') 
     f.write('RA -0.0058; {-Roll}\n')
     f.write('TA -0.0094 -0.0108; {-Pitch, -Yaw}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 1.00-0.000125-0.00006-0.000073;                            {DL4}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('TA 0.0044 0.0044; {Pitch, Yaw}\n')
     f.write('RA 0.0012; {Roll}\n')
@@ -156,25 +200,80 @@ def cosyrun(qFields):
     f.write('SA 0.000007 0.000147; {-x, -y}\n')
     f.write('RA -0.0012; {-Roll}\n')
     f.write('TA -0.0044 -0.0044; {-Pitch, -Yaw}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('\n')
     f.write('\n')
     f.write('DL 0.77-0.00006-0.000073;                                     {DL5}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 0.40;                                                      {DL6}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('MH 0.26 0.0103064+0.0000001 0.11;                             {HEX1}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')  
-    f.write('DL 0.27+0.00005;                                              {DL7}\n')
+    f.write('DL 0.27+0.00005;                                              {DL7}\n') 
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('MQ 0.350-0.0001 {0: .6f} 0.11;'.format(q3s))
     f.write('                               {Q3}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.35+0.00005+0.00165;                                      {DL8}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('M5 0.350-0.0033 {0: .6f} 0 0 0 0 0.08;'.format(q4s))
     f.write('                               {Q4}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.21+0.00165+0.0017;                                       {DL9}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('MQ 0.350-0.0034 {0: .6f} 0.06;'.format(q5s))
     f.write('                               {Q5}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.145+0.0017 ;                                             {DL10}\n')  
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('PS 0.01;\n')
     f.write('\n')
     #f.write('WRITE 6 \'ME(1,2) AT FP1 =\' ME(1,2);\n')
@@ -183,23 +282,88 @@ def cosyrun(qFields):
     f.write('{Section 2}\n')
     f.write('\n')
     f.write('DL 0.185 ;                                                    {DL11}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 0.17-0.00035 ;                                             {DL12}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('MC 1.25 22.5+0.0321 0.05 B1N B3S1 B3S2 7;                     {B3}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.51-0.00035-0.00192-0.00088;                              {DL13}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('MC 1.25 22.5+0.0807{-0.012} 0.05 B1N B4S1 B4S2 7;             {B4}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.30-0.00088;                                              {DL14}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+    
     f.write('\n')
     f.write('M5 0.26 0 0.01449-0.003433-0.00071+0.00016 0 0 0 0.12;        {HEX2}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.27;                                                      {DL15}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.27+0.0001;                                               {DL16}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('MQ 0.34-0.0002 {0: .6f} 0.14;'.format(q6s))
     f.write('                               {Q6}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.20+0.0001-0.00005 ;                                      {DL17}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('MQ 0.34+0.0001 {0: .6f} 0.13;'.format(q7s))
     f.write('                               {Q7}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.50-0.00005 ;                                             {DL18}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('{FC 1=dipole, 1/2=entrance/exit, 1/2=magn/elect, a1...a6}\n')
     f.write('\n')
@@ -214,15 +378,45 @@ def cosyrun(qFields):
     f.write('CB;\n')
     f.write('FD;\n')
     f.write('FR 3;\n')
-    f.write('\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('DL 0.50; {THIS IS PART OF WF1!}                               {DL19}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('M5 0.26 0 -0.01251*(0.09/0.11)^2+0.0000 0 0 0 {0.11}0.09;     {HEX3}\n')
+    
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 0.28;                                                      {DL20}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('\n')
     f.write('M5 0.26 0 0 (0.040233+0.01-0.01700)-0.00195 0 0 {0.07}0.09;   {OCT1}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('DL 1.75;                                                      {DL21}\n')
+    f.write('WRITE 99 VMAX(RAY(1));')
+    f.write('WRITE 99 VMIN(RAY(1));')
+    f.write('WRITE 99 VMAX(RAY(3));')
+    f.write('WRITE 99 VMIN(RAY(3));')
+
     f.write('PS 0.005;\n')
     f.write('\n')
     f.write('{Section 3}\n')
@@ -541,6 +735,7 @@ def cosyrun(qFields):
     f.write('{Beam A = 2000, Target(H) A=1, dE=1/2000=0.0005, dM=1/2001=0.00049975}\n')
     f.write('}}}\n')
     f.write('\n')
+    f.write('OPENF 99 \'{0}\' \'NEW\';\n'.format(tempresFilename))
     f.write('BP;\n')
     f.write('RECOIL_BL;\n')
     f.write('EP;\n')
@@ -568,7 +763,6 @@ def cosyrun(qFields):
     #f.write('WRITE 6 \'Resol.by max.ray =\' ABS(ME(1,7))/(2*WV);\n')
     #f.write('WRITE 6 \'ME(1,1),ME(1,2),ME(1,6),ME(1,7)=\' ME(1,1) ME(1,2) ME(1,6) ME(1,7);\n')
     #f.write('WRITE 6 \'M11*M22=\' ME(1,1)*ME(2,2);\n')
-    f.write('OPENF 99 \'temp-results\' \'NEW\';\n')
     f.write('WRITE 99 ABS(ME(1,7))/(2*WV);  \n')
     f.write('\n')
     f.write('ENDPROCEDURE ;\n')
@@ -577,28 +771,45 @@ def cosyrun(qFields):
     f.close()
     
     #Removing files from older runs
-    cmd = 'rm -f temp-results'		
+    cmd = 'rm -f ' + tempresFilename		
     failure, output = commands.getstatusoutput(cmd)
     
     #Run file
-    print('start cosy simulation')
-    cmd = './cosy simpleOptimization.fox'
+    cmd = './cosy ' + cosyFilename
     failure, output = commands.getstatusoutput(cmd)
-
-    try:
-        f = open('temp-results','r')  # Opening temp file with results
-        resol = f.readline()
+    
+    try: 
+        f = open(tempresFilename,'r')  # Opening temp file with results
+        resol, perOutside = checkEnvelope(f)
         f.close()
     except (OSError, IOError) as e:
         print('q1 = %.6f q2 = %.6f q3 = %.6f q4 = %.6f q5 = %.6f q6 = %.6f q7 = %.6f FAILED!'  %(q1s, q2s, q3s, q4s, q5s, q6s, q7s) )   
         resol = 0
+        perOutside = 0
             
-    f = open('results.txt','a')  # Writing results file: magnet field, resolution
-    f.write( '{0:.6f} {1:.6f} {2:.6f} {3:.6f} {4:.6f} {5:.6f} {6:.6f} {7:.1f}\n' .format(q1s, q2s, q3s, q4s, q5s, q6s, q7s, float(resol)) )
+    f = open(resultsFilename,'a')  # Writing results file: magnet field, resolution
+    f.write( '{0:.6f} {1:.6f} {2:.6f} {3:.6f} {4:.6f} {5:.6f} {6:.6f} {7:.1f} {8:.1f}\n' .format(q1s, q2s, q3s, q4s, q5s, q6s, q7s, float(resol), float(perOutside)) )
     f.close()
 
-    return float(resol)
+    return -float(resol)
 
-
-
+# Function that goes through an output file of a single COSY run and return resolution and percentage of max beam outside max beam envelope
+def checkEnvelope(f):
+    #         DL1,  Q1,  DL2,   Q2,  DL3,  B1,  DL4,  B2, DL5, Dl6, Hex1, DL7, Q3, DL8, Q4,   DL9, Q5, DL10, DL11, DL12, B3, DL13, B4, DL14, Hex2, DL15, DL16, Q6, DL17, Q7, DL18, WF1, DL19, Hex3, DL20, Oct1, DL21 
+    maxEnvX = [1, 0.055, 1, 0.068, 1, 0.030, 1, 0.030, 1, 1,  0.11, 1, 0.11, 1, 0.08, 1, 0.06, 1, 1,     1,  0.05, 1, 0.05, 1, 0.12, 1,    1,  0.14, 1, 0.13, 1, 0.11, 1,  0.09, 1,   0.09, 1 ]
+    maxEnvY = [1, 0.055, 1, 0.068, 1, 0.030, 1, 0.030, 1, 1,  0.11, 1, 0.11, 1, 0.08, 1, 0.06, 1, 1,     1,  0.05, 1, 0.05, 1, 0.12, 1,    1,  0.14, 1, 0.13, 1, 0.11, 1,  0.09, 1,   0.09, 1 ]
+    perOutside = 0
+    for i in range(0, 37):
+        x1 = float(f.readline())
+        x2 = float(f.readline())
+        xmax = max(x1,abs(x2))
+        y1 = float(f.readline())
+        y2 = float(f.readline())
+        ymax = max(y1,abs(y2))
+        if xmax > maxEnvX[i]:
+            perOutside = perOutside + (xmax-maxEnvX[i])/maxEnvX[i]
+        if ymax > maxEnvY[i]:
+            perOutside = perOutside + (ymax-maxEnvY[i])/maxEnvY[i]
+    resol = f.readline()
+    return resol, perOutside
 
